@@ -65,5 +65,17 @@ public interface HttpServletRequest extends ServletRequest{
 
     public HttpSession getSession(boolean create);
 
+    public HttpSession getSession();
+
+    public boolean isRequestedSessionIdValid();
+
+    public boolean isRequestedSessionIdFromCookie();
+
+    public boolean isRequestedSessionIdFromURL();
+    @Deprecated
+    public boolean isRequestedSessionIdFromUrl();
+
+    public boolean authenticate(HttpServletResponse response);
+
 
 }
