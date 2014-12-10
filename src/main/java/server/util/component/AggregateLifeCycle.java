@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by wanghm on 2014/12/10.
  */
-public class AggregateLifeCycle extends AbstractLifeCycle implements org.eclipse.jetty.util.component.Destroyable, Dumpable{
+public class AggregateLifeCycle extends AbstractLifeCycle implements Destroyable, Dumpable{
     private static Logger logger = LoggerFactory.getLogger(AggregateLifeCycle.class);
 
     private CopyOnWriteArrayList<Bean> _beans = new CopyOnWriteArrayList<Bean>();
@@ -178,11 +178,26 @@ public class AggregateLifeCycle extends AbstractLifeCycle implements org.eclipse
 
     public static String dump(Dumpable dumpable){
         StringBuffer sb = new StringBuffer();
+        try
+        {
+            dumpable.dump(sb,"");
+        }
+        catch (IOException e)
+        {
+            logger.warn("dump warn!-->{}",e);
+        }
+        return sb.toString();
+    }
 
+    protected void dumpThis(Appendable out) throws IOException
+    {
+        out.append(String.valueOf(this)).append(" - ").append(getState()).append("\n");
     }
 
     @Override
     public void dump(Appendable out, String indent) throws IOException {
-
+        //todo 暂时不写,使用到再说
     }
+
+
 }

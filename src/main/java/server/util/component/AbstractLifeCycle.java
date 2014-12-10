@@ -20,8 +20,8 @@ public class AbstractLifeCycle implements LifeCycle {
     public static final String RUNNING="RUNNING";
 
     private final Object _lock = new Object();
-    private final int _FAILED=-1,_STOPPED = 0,_STARTING = 1,_STARTED = 2,_STOPPING = 3;
-    private volatile int _STATE = _STOPPED;
+    private final int __FAILED = -1, __STOPPED = 0, __STARTING = 1, __STARTED = 2, __STOPPING = 3;
+    private volatile int _state = __STOPPED;
 
     protected final CopyOnWriteArrayList<Listener>_listeners = new CopyOnWriteArrayList<Listener>();
 
@@ -29,7 +29,7 @@ public class AbstractLifeCycle implements LifeCycle {
     public void start() throws Exception {
         synchronized (_lock){
             try{
-                if(_STATE == _STARTED || _STATE == _STARTING){
+                if(_state == __STARTED || _state == __STARTING){
                     return;
                 }
                 setSarting();
@@ -54,7 +54,7 @@ public class AbstractLifeCycle implements LifeCycle {
     }
 
     private void setStarted(){
-        _STATE = _STARTED;
+        _state = __STARTED;
         logger.debug("Started {}",this);
         for(Listener listener : _listeners){
             listener.lifeCycleStarted(this);
@@ -63,7 +63,7 @@ public class AbstractLifeCycle implements LifeCycle {
 
     private void setSarting(){
         logger.debug("starting {}",this);
-        _STATE = _STARTING;
+        _state = __STARTING;
         for(Listener listener : _listeners){
             listener.lifeCycleStarting(this);
         }
@@ -74,37 +74,69 @@ public class AbstractLifeCycle implements LifeCycle {
 
     }
 
-    @Override
-    public boolean isRunning() {
-        return false;
+    public boolean isRunning()
+    {
+        final int state = _state;
+
+        return state == __STARTED || state == __STARTING;
     }
 
-    @Override
-    public boolean isStarted() {
-        return false;
+    public boolean isStarted()
+    {
+        return _state == __STARTED;
     }
 
-    @Override
-    public boolean isStopping() {
-        return false;
+    public boolean isStarting()
+    {
+        return _state == __STARTING;
     }
 
-    @Override
-    public boolean isStopped() {
-        return false;
+    public boolean isStopping()
+    {
+        return _state == __STOPPING;
     }
 
-    @Override
-    public boolean isFailed() {
-        return false;
+    public boolean isStopped()
+    {
+        return _state == __STOPPED;
+    }
+
+    public boolean isFailed()
+    {
+        return _state == __FAILED;
     }
 
     @Override
     public void addLifeCycleListener(Listener listener) {
-
+        _listeners.add(listener);
     }
+
+    public void removeLifeCycleListener(org.eclipse.jetty.util.component.LifeCycle.Listener listener){
+        _listeners.remove(listener);
+    }
+    public String getState()
+    {
+        switch(_state)
+        {
+            case __FAILED: return FAILED;
+            case __STARTING: return STARTING;
+            case __STARTED: return STARTED;
+            case __STOPPING: return STOPPING;
+            case __STOPPED: return STOPPED;
+        }
+        return null;
+    }
+
+    public static String getStatus(LifeCycle lc) {
+        if (lc.isStarted()) return STARTED;
+        if (lc.isStopping()) return STOPPING;
+        if (lc.isStopped()) return STOPPED;
+        if (lc.isStarting()) return STARTING;
+        return FAILED;
+    }
+
     private void setFailed(Throwable th){
-        _STATE = _FAILED;
+        _state = __FAILED;
         logger.warn(FAILED+" " + this+": "+th,th);
         for(Listener listener : _listeners)
             listener.lifeCycleFailure(this,th);

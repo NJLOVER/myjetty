@@ -14,6 +14,8 @@ public interface LifeCycle {
 
     public boolean isStarted();
 
+    public boolean isStarting();
+
     public boolean isStopping();
 
     public boolean isStopped();
