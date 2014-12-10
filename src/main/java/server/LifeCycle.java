@@ -1,6 +1,6 @@
-package myjetty;
+package server;
 
-import myjetty.util.EventListener;
+import server.util.EventListener;
 
 /**
  * Created by wanghm on 2014/12/8.

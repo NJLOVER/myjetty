@@ -1,6 +1,6 @@
-package myjetty.component;
+package server.util.component;
 
-import myjetty.LifeCycle;
+import server.LifeCycle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,11 @@ public class AbstractLifeCycle implements LifeCycle {
         }
     }
 
-    protected void doStart(){
+    protected void doStart() throws Exception {
+
+    }
+
+    protected  void doStop() throws Exception{
 
     }
 

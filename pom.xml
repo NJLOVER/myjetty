@@ -19,6 +19,11 @@
             <artifactId>logback-classic</artifactId>
             <version>1.0.11</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-io</artifactId>
+            <version>8.1.7.v20120910</version>
+        </dependency>
     </dependencies>
 
 

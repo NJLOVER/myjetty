@@ -1,7 +1,7 @@
-package myjetty;
+package server;
 
-import myjetty.jmx.HandlerWrapper;
-import myjetty.util.Attributes;
+import server.jmx.HandlerWrapper;
+import server.util.Attributes;
 
 /**
  * Created by wanghm on 2014/12/9.

@@ -1,4 +1,4 @@
-package myjetty.util;
+package server.util;
 
 import java.util.Enumeration;
 
