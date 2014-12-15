@@ -59,9 +59,49 @@ public interface Connector extends LifeCycle{
     void setPort(int port);
     int getPort();
     int getLocalPort();
+
+    //Socket的最大空闲时间，以及在资源比较少(如线程池中的任务数比最大可用线程数要多)的情况下的最大空闲时间，当空闲时间超过这个时间后关闭当前连接(Socket)。
     int getMaxIdleTime();
     void setMaxIdleTime(int ms);
-    //todo maybe
     int getLowResourceMaxIdleTime();
     void setLowResourceMaxIdleTime(int ms);
+    // 是否当前Connector处于LowResources状态，即线程池中的任务数比最大可用线程数要多
+    public boolean isLowResources();
+
+    Object getConnection();
+    //通过代理服务器获取负载均衡,可以讲真实的用户ip增加到header里面,XFF(X-Forwarded-For)
+    boolean getResolveNames();
+    //当前Connector处理的请求数
+    public int getRequests();
+
+    public long getConnectionsDurationTotal();
+
+    public int getConnections();
+
+    public int getConnectionOpen();
+
+    public int getConnectionOpenMax();
+    //duration持续
+    // 当前Connector的最长连接持续时间
+    public long getConnectionsDurationMax();
+    // 当前Connector平均连接持续时间
+    public double getConnectionsDurationMean() ;
+
+    public double getConnectionsDurationStdDev();
+    // 当前Connector的所有连接的平均请求数
+    public double getConnectionsRequestsMean() ;
+
+    // 当前Connector的所有连接的请求数标准偏差
+    public double getConnectionsRequestsStdDev() ;
+    // 当前Connector的所有连接的最大请求数
+    public int getConnectionsRequestsMax();
+
+    // 打开或关闭统计功能
+    public void setStatsOn(boolean on);
+
+    // 重置统计数据，以及统计开始时间
+    public void statsReset();
+
+    // 统计信息的开启时间戳
+    public long getStatsOnMs();
 }
