@@ -83,6 +83,12 @@ public class AggregateLifeCycle extends AbstractLifeCycle implements Destroyable
         return false;
     }
 
+    public boolean addBean(Object o)
+    {
+        // beans are joined unless they are started lifecycles
+        return addBean(o,!((o instanceof LifeCycle)&&((LifeCycle)o).isStarted()));
+    }
+
     public boolean addBean(Object o,boolean managed){
         if(contains(o))
             return false;

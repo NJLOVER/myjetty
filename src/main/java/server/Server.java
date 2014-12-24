@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import server.jmx.HandlerWrapper;
 import server.util.Attributes;
 import server.util.component.Container;
+import server.util.thread.ThreadPool;
 import sun.font.AttributeMap;
-import sun.nio.ch.ThreadPool;
 
 /**
  * Created by wanghm on 2014/12/9.
@@ -33,8 +33,11 @@ public class Server extends HandlerWrapper implements Attributes {
     }
     public Server(int port){
         setServer(this);
-        Connector connector = new S
+        Connector connector = new
     }
 
-
+    public ThreadPool getThreadPool()
+    {
+        return _threadPool;
+    }
 }

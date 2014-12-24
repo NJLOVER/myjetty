@@ -31,6 +31,8 @@ public class TestVolatile {
             //thread.join();
         }
         System.out.println(String.format("------>count=%d",new Object[]{count}));
+        System.out.println(Runtime.getRuntime().availableProcessors());
+
     }
 
 }

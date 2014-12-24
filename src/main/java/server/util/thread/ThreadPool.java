@@ -12,7 +12,7 @@ public interface ThreadPool {
     //获取空闲线程数
     public int getIdleThreads();
 
-    public boolean getLowOnThreads();
+    public boolean isLowOnThreads();
 
     public interface SizedThreadPool extends ThreadPool{
         public int getMinThreads();
