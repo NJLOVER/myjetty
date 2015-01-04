@@ -4,6 +4,7 @@ import http.HttpBuffers;
 import http.HttpBuffersImpl;
 import http.HttpHeaders;
 import http.HttpSchemes;
+import org.eclipse.jetty.io.EndPoint;
 import org.eclipse.jetty.io.EofException;
 import org.eclipse.jetty.util.statistic.CounterStatistic;
 import org.eclipse.jetty.util.statistic.SampleStatistic;
@@ -232,9 +233,28 @@ public abstract class AbstractConnector extends AggregateLifeCycle implements Ht
     protected void configure(Socket socket){
         try{
             socket.setTcpNoDelay(true);//设置无延迟链接
+            if(_soLingerTime>=0){
+                socket.setSoLinger(true,_soLingerTime/1000);
+            }else{
+                socket.setSoLinger(false,0);
+            }
         }catch (Exception e){
-
+            logger.warn("socket config error:{}",e);
         }
+    }
+
+    public void customize(EndPoint endPoint,Request request){
+        if(isForwarded())
+            checkForwardedHeaders(endPoint,request);
+    }
+
+    protected void checkForwardedHeaders(EndPoint endpoint,Request request){
+        //todo  定制headers
+    }
+
+    public boolean isForwarded()
+    {
+        return _forwarded;
     }
 
     private class Acceptor implements Runnable{
@@ -329,5 +349,10 @@ public abstract class AbstractConnector extends AggregateLifeCycle implements Ht
         return (int)_connectionStats.getCurrent();
     }
 
+    protected abstract void accept(int acceptorID) throws IOException, InterruptedException;
 
+    /* ------------------------------------------------------------ */
+    public void stopAccept(int acceptorID) throws Exception
+    {
+    }
 }
